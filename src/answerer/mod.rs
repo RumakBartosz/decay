@@ -1,4 +1,4 @@
-use std::io::stdin;
+use std::io::{stdin, Write};
 
 pub struct Answerer {
     message: String
@@ -13,14 +13,12 @@ impl Answerer {
         }
     }
 
-    pub fn retrieve_message(&self) -> String {
+    fn retrieve_message(&self) -> String {
         let mut s = String::new();
         stdin().read_line(&mut s)
             .expect("something wrong on message input");
 
         let message_input: String = s.parse().unwrap();
-
-        println!("{:?}", message_input);
 
         message_input
     }
@@ -45,4 +43,14 @@ impl Answerer {
         "exit"
     }
 
+    pub fn answer(&self) {
+        std::io::stdout().flush().unwrap();
+        let received_message = self.retrieve_message();
+
+        match received_message.trim() {
+            "tbi"    => println!("{}", self.answer_protocol()),
+            "tbi v1" => println!("{}", self.answer_version()),
+            _        => println!("{}", self.answer_move())
+        }
+    }
 }
