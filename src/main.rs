@@ -1,8 +1,12 @@
 mod answerer;
+use answerer::Answerer;
 
 fn main() {
-    let answerer = answerer::Answerer::new();
-    answerer.answer();
+    let mut answerer = Answerer::new();
+
+    loop {
+        answerer.answer();
+    }
 }
 
 

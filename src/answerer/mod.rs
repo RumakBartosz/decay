@@ -1,7 +1,10 @@
 use std::io::{stdin, Write};
+#[path = "../parser/mod.rs"] mod parser;
+use parser::Color;
 
 pub struct Answerer {
-    message: String
+    message: String,
+    color: Color
 }
 
 
@@ -9,7 +12,8 @@ impl Answerer {
 
     pub fn new() -> Answerer {
         Answerer {
-            message: String::from("")
+            message: String::from(""),
+            color: Color::Red
         }
     }
 
@@ -31,26 +35,43 @@ impl Answerer {
         "tbi v1 ok"
     }
 
+    fn set_color(&mut self, color: Color) {
+        self.color = color
+    }
+
     fn answer_color(&self) -> &str {
-        "unimplemented"
+        "color ok"
     }
 
     fn answer_move(&self) -> &str {
-        "unimplemented"
+        if self.color == Color::Red {
+            "down"
+        }
+        else {
+            "up"
+        }
     }
 
     fn answer_exit(&self) -> &str {
         "exit"
     }
 
-    pub fn answer(&self) {
+    pub fn answer(&mut self) {
         std::io::stdout().flush().unwrap();
         let received_message = self.retrieve_message();
 
         match received_message.trim() {
-            "tbi"    => println!("{}", self.answer_protocol()),
-            "tbi v1" => println!("{}", self.answer_version()),
-            _        => println!("{}", self.answer_move())
+            "tbi"        => println!("{}", self.answer_protocol()),
+            "tbi v1"     => println!("{}", self.answer_version()),
+            "color red"  => {
+                self.set_color(Color::Red);
+                println!("{}", self.answer_color());
+            },
+            "color blue"  => {
+                self.set_color(Color::Blue);
+                println!("{}", self.answer_color());
+            },
+            _            => println!("{}", self.answer_move())
         }
     }
 }
