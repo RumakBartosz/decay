@@ -36,6 +36,10 @@ impl RandBot {
             available_move.push("right");
         }
 
+        if available_move.len() == 0 {
+            available_move.push("up");
+        }
+
         available_move
     }
 
