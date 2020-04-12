@@ -1,10 +1,11 @@
 use std::io::{stdin, Write};
 #[path = "../parser/mod.rs"] mod parser;
-use parser::Color;
+#[path = "../rand_bot/mod.rs"] mod bot;
+use bot::RandBot;
+use bot::parser::{Color, Mark, parse_map};
 
 pub struct Answerer {
-    message: String,
-    color: Color
+    bot: RandBot,
 }
 
 
@@ -12,8 +13,10 @@ impl Answerer {
 
     pub fn new() -> Answerer {
         Answerer {
-            message: String::from(""),
-            color: Color::Red
+            bot: RandBot {
+                map: Vec::new(),
+                color: Color::Red
+            }
         }
     }
 
@@ -36,7 +39,7 @@ impl Answerer {
     }
 
     fn set_color(&mut self, color: Color) {
-        self.color = color
+        self.bot.color = color
     }
 
     fn answer_color(&self) -> &str {
@@ -44,12 +47,7 @@ impl Answerer {
     }
 
     fn answer_move(&self) -> &str {
-        if self.color == Color::Red {
-            "down"
-        }
-        else {
-            "up"
-        }
+        self.bot.return_available_move()
     }
 
     fn answer_exit(&self) -> &str {
@@ -67,11 +65,16 @@ impl Answerer {
                 self.set_color(Color::Red);
                 println!("{}", self.answer_color());
             },
-            "color blue"  => {
+            "color blue" => {
                 self.set_color(Color::Blue);
                 println!("{}", self.answer_color());
             },
-            _            => println!("{}", self.answer_move())
+            _            => {
+                let move_str: &str = received_message.trim().split(' ').collect::<Vec<&str>>()[1];
+                let map: Vec<Vec<Mark>> = parse_map(move_str);
+                self.bot.map = map;
+                println!("{}", self.answer_move())
+            }
         }
     }
 }
