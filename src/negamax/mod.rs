@@ -3,22 +3,24 @@ use parser::{Mark, Color,
              is_move_up_possible, is_move_down_possible,
              is_move_left_possible, is_move_right_possible};
 
-use rand;
-use rand::seq::SliceRandom;
+use parser::Mark::*;
 
 
-pub struct RandBot {
-    pub color: Color,
-    pub map: Vec<Vec<Mark>>
+pub struct MiniMaxBot {
+    map: Vec<Vec<Mark>>,
+    color: Color
 }
 
-
-impl RandBot {
-    pub fn from(map: Vec<Vec<Mark>>, color: Color) -> RandBot {
-        RandBot {
+impl MiniMaxBot {
+    pub fn from(map: Vec<Vec<Mark>>, color: Color) -> MiniMaxBot {
+        MiniMaxBot {
             map,
             color
         }
+    }
+
+    fn game_over(&self) -> bool {
+        false
     }
 
     fn get_all_available_moves(&self) -> Vec<&str> {
@@ -43,10 +45,11 @@ impl RandBot {
         available_move
     }
 
-    pub fn return_available_move(&self) -> &str {
-        let possible_moves = self.get_all_available_moves();
-        let mut rng = rand::thread_rng();
+    fn make_move(one_move: &str) -> Vec<Vec<Mark>> {
+        vec![vec![x]]
+    }
 
-        possible_moves.choose(&mut rng).unwrap()
+    fn unmake_move(one_move: &str) -> Vec<Vec<Mark>> {
+        vec![vec![x]]
     }
 }

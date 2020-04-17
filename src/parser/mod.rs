@@ -160,8 +160,8 @@ fn number_of_spaces(num: u32) -> Vec<char> {
 pub fn number_to_spaces(map_row: Vec<char>) -> Vec<char> {
     let mut returned_row: Vec<char> = Vec::new();
     let mut tens: u32 = 0;
-    let mut ones: u32 = 0;
-    let mut spaces: Vec<char> = Vec::new();
+    let mut ones: u32;
+    let mut spaces: Vec<char>;
 
     for element in &map_row {
         if element.is_digit(10) && tens == 0 {
@@ -227,7 +227,7 @@ fn markify_map(string_map: Vec<Vec<char>>) -> Vec<Vec<Mark>> {
 
 pub fn parse_map(move_string: &str) -> Vec<Vec<Mark>> {
     let broken_on_slash: Vec<Vec<char>> = break_on_slash(move_string);
-    let mut parsed_map: Vec<Vec<Mark>> = Vec::new();
+    let parsed_map: Vec<Vec<Mark>>;
 
     let mut numbers_changed: Vec<Vec<char>> = Vec::new();
 

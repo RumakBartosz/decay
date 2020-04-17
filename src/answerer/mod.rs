@@ -13,10 +13,7 @@ impl Answerer {
 
     pub fn new() -> Answerer {
         Answerer {
-            bot: RandBot {
-                map: Vec::new(),
-                color: Color::Red
-            }
+            bot: RandBot::from(Vec::new(), Color::Red)
         }
     }
 
@@ -50,9 +47,6 @@ impl Answerer {
         self.bot.return_available_move()
     }
 
-    fn answer_exit(&self) -> &str {
-        "exit"
-    }
 
     pub fn answer(&mut self) {
         std::io::stdout().flush().unwrap();
