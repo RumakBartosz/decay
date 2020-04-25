@@ -2,7 +2,8 @@ use crate::parser::{Color,
              is_move_up_possible, is_move_down_possible,
              is_move_left_possible, is_move_right_possible};
 
-use crate::parser::Mark::{self,x};
+use crate::parser::Mark;
+use crate::parser::get_color_head;
 
 
 pub struct MiniMaxBot {
@@ -11,11 +12,15 @@ pub struct MiniMaxBot {
 }
 
 impl MiniMaxBot {
-    pub fn from(map: Vec<Vec<Mark>>, color: Color) -> MiniMaxBot {
+    pub fn from(map: &Vec<Vec<Mark>>, color: &Color) -> MiniMaxBot {
         MiniMaxBot {
-            map,
-            color
+            map: map.clone(),
+            color: color.clone()
         }
+    }
+
+    pub fn get_map(&self) -> &Vec<Vec<Mark>> {
+        &self.map
     }
 
     pub fn game_over(&self) -> bool {
@@ -48,11 +53,33 @@ impl MiniMaxBot {
         available_move
     }
 
-    fn make_move(one_move: &str) -> Vec<Vec<Mark>> {
-        vec![vec![x]]
+    pub fn make_move(&mut self, one_move: &str) {
+        let (x_dim, y_dim) = get_color_head(&self.map, &self.color);
+
+        if &self.color == &Color::Red {
+            self.map[y_dim][x_dim] = Mark::r;
+
+            match one_move {
+                "up" => self.map[y_dim - 1][x_dim] = Mark::R,
+                "down" => self.map[y_dim + 1][x_dim] = Mark::R,
+                "left" => self.map[y_dim][x_dim - 1]= Mark::R,
+                "right" => self.map[y_dim][x_dim + 1] = Mark::R,
+                _ => panic!("wrong move: {} at make_move", one_move)
+            }
+        }
+        else {
+            self.map[y_dim][x_dim] = Mark::b;
+
+            match one_move {
+                "up" => self.map[y_dim - 1][x_dim] = Mark::B,
+                "down" => self.map[y_dim + 1][x_dim] = Mark::B,
+                "left" => self.map[y_dim][x_dim - 1] = Mark::B,
+                "right" => self.map[y_dim][x_dim + 1] = Mark::B,
+                _ => panic!("wrong move: {} at make_move", one_move)
+            }
+        }
     }
 
-    fn unmake_move(one_move: &str) -> Vec<Vec<Mark>> 
-        vec![vec![x]]
+    fn unmake_move(&self, one_move: &str) {
     }
 }

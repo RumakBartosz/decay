@@ -9,7 +9,7 @@ pub enum Mark {
     x
 }
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone)]
 pub enum Color {
     Red,
     Blue
@@ -17,8 +17,8 @@ pub enum Color {
 
 type Map = Vec<Vec<Mark>>;
 
-pub fn get_color_head(map: &Map, color: Color) -> (usize, usize) {
-    if color == Color::Red {
+pub fn get_color_head(map: &Map, color: &Color) -> (usize, usize) {
+    if color == &Color::Red {
         get_red_head(map)
     }
     else {
