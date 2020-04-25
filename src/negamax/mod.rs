@@ -80,6 +80,30 @@ impl MiniMaxBot {
         }
     }
 
-    fn unmake_move(&self, one_move: &str) {
+    pub fn unmake_move(&mut self, one_move: &str) {
+        let (x_dim, y_dim) = get_color_head(&self.map, &self.color);
+
+        if &self.color == &Color::Red {
+            self.map[y_dim][x_dim] = Mark::x;
+
+            match one_move {
+                "up" => self.map[y_dim - 1][x_dim] = Mark::R,
+                "down" => self.map[y_dim + 1][x_dim] = Mark::R,
+                "left" => self.map[y_dim][x_dim - 1]= Mark::R,
+                "right" => self.map[y_dim][x_dim + 1] = Mark::R,
+                _ => panic!("wrong move: {} at make_move", one_move)
+            }
+        }
+        else {
+            self.map[y_dim][x_dim] = Mark::x;
+
+            match one_move {
+                "up" => self.map[y_dim + 1][x_dim] = Mark::B,
+                "down" => self.map[y_dim - 1][x_dim] = Mark::B,
+                "left" => self.map[y_dim][x_dim + 1] = Mark::B,
+                "right" => self.map[y_dim][x_dim - 1] = Mark::B,
+                _ => panic!("wrong move: {} at make_move", one_move)
+            }
+        }
     }
 }
