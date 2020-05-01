@@ -1,25 +1,26 @@
 use std::io::{stdin, Write};
-#[path = "../parser/mod.rs"] mod parser;
-#[path = "../rand_bot/mod.rs"] mod bot;
+#[path = "../rand_bot/mod.rs"]
+mod bot;
+#[path = "../parser/mod.rs"]
+mod parser;
+use bot::parser::{parse_map, Color, Mark};
 use bot::RandBot;
-use bot::parser::{Color, Mark, parse_map};
 
 pub struct Answerer {
     bot: RandBot,
 }
 
-
 impl Answerer {
-
     pub fn new() -> Answerer {
         Answerer {
-            bot: RandBot::from(Vec::new(), Color::Red)
+            bot: RandBot::from(Vec::new(), Color::Red),
         }
     }
 
     fn retrieve_message(&self) -> String {
         let mut s = String::new();
-        stdin().read_line(&mut s)
+        stdin()
+            .read_line(&mut s)
             .expect("something wrong on message input");
 
         let message_input: String = s.parse().unwrap();
@@ -47,23 +48,22 @@ impl Answerer {
         self.bot.return_available_move()
     }
 
-
     pub fn answer(&mut self) {
         std::io::stdout().flush().unwrap();
         let received_message = self.retrieve_message();
 
         match received_message.trim() {
-            "tbi"        => println!("{}", self.answer_protocol()),
-            "tbi v1"     => println!("{}", self.answer_version()),
-            "color red"  => {
+            "tbi" => println!("{}", self.answer_protocol()),
+            "tbi v1" => println!("{}", self.answer_version()),
+            "color red" => {
                 self.set_color(Color::Red);
                 println!("{}", self.answer_color());
-            },
+            }
             "color blue" => {
                 self.set_color(Color::Blue);
                 println!("{}", self.answer_color());
-            },
-            _            => {
+            }
+            _ => {
                 let move_str: &str = received_message.trim().split(' ').collect::<Vec<&str>>()[1];
                 let map: Vec<Vec<Mark>> = parse_map(move_str);
                 self.bot.map = map;

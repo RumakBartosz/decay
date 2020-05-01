@@ -1,24 +1,21 @@
-#[path = "../parser/mod.rs"] pub mod parser;
-use parser::{Mark, Color,
-             is_move_up_possible, is_move_down_possible,
-             is_move_left_possible, is_move_right_possible};
+#[path = "../parser/mod.rs"]
+pub mod parser;
+use parser::{
+    is_move_down_possible, is_move_left_possible, is_move_right_possible, is_move_up_possible,
+    Color, Mark,
+};
 
 use rand;
 use rand::seq::SliceRandom;
 
-
 pub struct RandBot {
     pub color: Color,
-    pub map: Vec<Vec<Mark>>
+    pub map: Vec<Vec<Mark>>,
 }
-
 
 impl RandBot {
     pub fn from(map: Vec<Vec<Mark>>, color: Color) -> RandBot {
-        RandBot {
-            map,
-            color
-        }
+        RandBot { map, color }
     }
 
     fn get_all_available_moves(&self) -> Vec<&str> {

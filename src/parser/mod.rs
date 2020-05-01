@@ -1,4 +1,3 @@
-
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Mark {
     r,
@@ -6,13 +5,13 @@ pub enum Mark {
     b,
     B,
     o,
-    x
+    x,
 }
 
 #[derive(PartialEq, Clone)]
 pub enum Color {
     Red,
-    Blue
+    Blue,
 }
 
 type Map = Vec<Vec<Mark>>;
@@ -20,8 +19,7 @@ type Map = Vec<Vec<Mark>>;
 pub fn get_color_head(map: &Map, color: &Color) -> (usize, usize) {
     if color == &Color::Red {
         get_red_head(map)
-    }
-    else {
+    } else {
         get_blue_head(map)
     }
 }
@@ -30,7 +28,7 @@ pub fn get_red_head(map: &Map) -> (usize, usize) {
     for (y_index, row) in map.iter().enumerate() {
         for (x_index, element) in row.iter().enumerate() {
             if element == &Mark::R {
-                return (x_index, y_index)
+                return (x_index, y_index);
             }
         }
     }
@@ -42,7 +40,7 @@ pub fn get_blue_head(map: &Map) -> (usize, usize) {
     for (y_index, row) in map.iter().enumerate() {
         for (x_index, element) in row.iter().enumerate() {
             if element == &Mark::B {
-                return (x_index, y_index)
+                return (x_index, y_index);
             }
         }
     }
@@ -55,7 +53,7 @@ pub fn is_move_up_possible(map: &Map, color: &Color) -> bool {
         let (x_red, y_red) = get_red_head(&map);
 
         if map[y_red - 1][x_red] == Mark::x {
-            return true
+            return true;
         }
     }
 
@@ -63,7 +61,7 @@ pub fn is_move_up_possible(map: &Map, color: &Color) -> bool {
         let (x_blue, y_blue) = get_blue_head(&map);
 
         if map[y_blue - 1][x_blue] == Mark::x {
-            return true
+            return true;
         }
     }
 
@@ -75,7 +73,7 @@ pub fn is_move_down_possible(map: &Map, color: &Color) -> bool {
         let (x_red, y_red) = get_red_head(&map);
 
         if map[y_red + 1][x_red] == Mark::x {
-            return true
+            return true;
         }
     }
 
@@ -83,20 +81,19 @@ pub fn is_move_down_possible(map: &Map, color: &Color) -> bool {
         let (x_blue, y_blue) = get_blue_head(&map);
 
         if map[y_blue + 1][x_blue] == Mark::x {
-            return true
+            return true;
         }
     }
 
     false
 }
 
-
 pub fn is_move_left_possible(map: &Map, color: &Color) -> bool {
     if color == &Color::Red {
         let (x_red, y_red) = get_red_head(&map);
 
         if map[y_red][x_red - 1] == Mark::x {
-            return true
+            return true;
         }
     }
 
@@ -104,20 +101,19 @@ pub fn is_move_left_possible(map: &Map, color: &Color) -> bool {
         let (x_blue, y_blue) = get_blue_head(&map);
 
         if map[y_blue][x_blue - 1] == Mark::x {
-            return true
+            return true;
         }
     }
 
     false
 }
 
-
 pub fn is_move_right_possible(map: &Map, color: &Color) -> bool {
     if color == &Color::Red {
         let (x_red, y_red) = get_red_head(&map);
 
         if map[y_red][x_red + 1] == Mark::x {
-            return true
+            return true;
         }
     }
 
@@ -125,11 +121,29 @@ pub fn is_move_right_possible(map: &Map, color: &Color) -> bool {
         let (x_blue, y_blue) = get_blue_head(&map);
 
         if map[y_blue][x_blue + 1] == Mark::x {
-            return true
+            return true;
         }
     }
 
     false
+}
+
+pub fn get_all_available_moves(map: &Vec<Vec<Mark>>, color: &Color) -> Vec<String> {
+    let mut available_move: Vec<String> = Vec::new();
+    if is_move_up_possible(map, &color) {
+        available_move.push("up".to_string());
+    }
+    if is_move_down_possible(map, &color) {
+        available_move.push("down".to_string());
+    }
+    if is_move_left_possible(map, &color) {
+        available_move.push("left".to_string());
+    }
+    if is_move_right_possible(map, &color) {
+        available_move.push("right".to_string());
+    }
+
+    available_move
 }
 
 pub fn break_on_slash(move_string: &str) -> Vec<Vec<char>> {
@@ -140,8 +154,7 @@ pub fn break_on_slash(move_string: &str) -> Vec<Vec<char>> {
         if element == '/' {
             whole_map.push(row);
             row = Vec::new();
-        }
-        else {
+        } else {
             row.push(element);
         }
     }
@@ -166,23 +179,19 @@ pub fn number_to_spaces(map_row: Vec<char>) -> Vec<char> {
     for element in &map_row {
         if element.is_digit(10) && tens == 0 {
             tens = element.to_digit(10).unwrap();
-        }
-        else if element.is_digit(10) && tens != 0 {
+        } else if element.is_digit(10) && tens != 0 {
             ones = element.to_digit(10).unwrap();
             spaces = number_of_spaces(tens * 10 + ones);
             tens = 0;
             returned_row.append(&mut spaces);
-        }
-        else if tens != 0 {
+        } else if tens != 0 {
             spaces = number_of_spaces(tens);
             tens = 0;
             returned_row.append(&mut spaces);
             returned_row.push(*element);
-        }
-        else {
+        } else {
             returned_row.push(*element);
         }
-
     }
 
     returned_row
@@ -194,20 +203,15 @@ fn markify_row(string_map_row: Vec<char>) -> Vec<Mark> {
     for element in string_map_row {
         if element == 'o' {
             row.push(Mark::o);
-        }
-        else if element == ' ' {
+        } else if element == ' ' {
             row.push(Mark::x);
-        }
-        else if element == 'r' {
+        } else if element == 'r' {
             row.push(Mark::r);
-        }
-        else if element == 'R' {
+        } else if element == 'R' {
             row.push(Mark::R);
-        }
-        else if element == 'b' {
+        } else if element == 'b' {
             row.push(Mark::b);
-        }
-        else if element == 'B' {
+        } else if element == 'B' {
             row.push(Mark::B);
         }
     }
@@ -224,6 +228,7 @@ fn markify_map(string_map: Vec<Vec<char>>) -> Vec<Vec<Mark>> {
 
     markified_map
 }
+
 
 pub fn parse_map(move_string: &str) -> Vec<Vec<Mark>> {
     let broken_on_slash: Vec<Vec<char>> = break_on_slash(move_string);
