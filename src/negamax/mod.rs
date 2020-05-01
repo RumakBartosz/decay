@@ -97,7 +97,8 @@ impl MiniMaxBot {
         for available_move in moves {
             &self.make_move(&map, &available_move);
             let new_value = &self.maximize(&map, ply - 1);
-            if *new_value < worst {
+            &self.unmake_move(&map, &available_move);
+            if *new_value > worst {
                 worst = *new_value;
             }
         }
@@ -113,11 +114,12 @@ impl MiniMaxBot {
             return 0;
         }
 
-        let mut best = -1000;
+        let mut best = 1000;
 
         for available_move in moves {
             &self.make_move(&map, &available_move);
             let new_value = &self.maximize(&map, ply - 1);
+            &self.unmake_move(&map, &available_move);
             if *new_value > best {
                 best = *new_value;
             }
@@ -127,7 +129,21 @@ impl MiniMaxBot {
 
     }
 
-    pub fn which_move_shall_i_take() {}
+    pub fn which_move_shall_i_take(&self, map: &Vec<Vec<Mark>>, ply: u8) -> String {
+        let moves = get_all_available_moves(&map, &self.color);
+        let mut best_value = -1000;
+        let mut best_move = String::new();
 
-    pub fn evaluate(map: &Vec<Vec<Mark>>) {}
+        for available_move in moves {
+            &self.make_move(&map, &available_move);
+            let new_value = &self.maximize(&map, ply - 1);
+            &self.unmake_move(&map, &available_move);
+            if *new_value > best_value {
+                best_value = *new_value;
+                best_move = available_move;
+            }
+        }
+
+        best_move
+    }
 }
