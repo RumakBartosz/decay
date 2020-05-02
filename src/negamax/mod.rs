@@ -29,6 +29,27 @@ impl MiniMaxBot {
         false
     }
 
+    pub fn game_over_for_you(&self, map: &Vec<Vec<Mark>>) -> bool {
+        if get_all_available_moves(map, &self.color).len() == 0 {
+            return true;
+        }
+
+        false
+    }
+
+    pub fn game_over_for_him(&self, map: &Vec<Vec<Mark>>) -> bool {
+        let other_color = match &self.color {
+            &Color::Red => &Color::Blue,
+            &Color::Blue => &Color::Red
+        };
+
+        if get_all_available_moves(map, other_color).len() == 0 {
+            return true;
+        }
+
+        false
+    }
+
     pub fn make_move(&self, map: &Vec<Vec<Mark>>, one_move: &str) -> Vec<Vec<Mark>> {
         let (x_dim, y_dim) = get_color_head(&map, &self.color);
         let mut given_map = map.to_vec();
@@ -148,6 +169,13 @@ impl MiniMaxBot {
     }
 
     fn evaluate_board(&self, map: &Vec<Vec<Mark>>) -> isize {
+        if self.game_over_for_you(map) {
+            return -1000;
+        }
+
+        if self.game_over_for_him(map) {
+            return 1000;
+        }
 
         0
     }

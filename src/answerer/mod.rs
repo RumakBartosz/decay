@@ -6,7 +6,6 @@ pub struct Answerer {
     bot: MiniMaxBot,
 }
 
-//TODO: change RandBot to MiniMaxBot
 impl Answerer {
     pub fn new() -> Answerer {
         Answerer {
