@@ -1,5 +1,4 @@
-mod answerer;
-use answerer::Answerer;
+use decay::answerer::{Answerer};
 
 fn main() {
     let mut answerer = Answerer::new();

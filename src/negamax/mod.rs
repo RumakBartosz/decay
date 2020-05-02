@@ -7,7 +7,7 @@ use crate::parser::get_color_head;
 use crate::parser::Mark;
 
 pub struct MiniMaxBot {
-    color: Color,
+    pub color: Color,
 }
 
 impl MiniMaxBot {
@@ -89,7 +89,7 @@ impl MiniMaxBot {
         let moves = get_all_available_moves(&map, &self.color);
 
         if ply == 0 || self.game_over(&map) {
-            return 0;
+            return self.evaluate_board(map);
         }
 
         let mut worst = 1000;
@@ -111,7 +111,7 @@ impl MiniMaxBot {
         let moves = get_all_available_moves(&map, &self.color);
 
         if ply == 0 || self.game_over(&map) {
-            return 0;
+            return self.evaluate_board(map);
         }
 
         let mut best = 1000;
@@ -145,5 +145,10 @@ impl MiniMaxBot {
         }
 
         best_move
+    }
+
+    fn evaluate_board(&self, map: &Vec<Vec<Mark>>) -> isize {
+
+        0
     }
 }

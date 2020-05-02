@@ -1,19 +1,16 @@
+use crate::parser::{parse_map, Color, Mark};
+use crate::negamax::MiniMaxBot;
 use std::io::{stdin, Write};
-#[path = "../rand_bot/mod.rs"]
-mod bot;
-#[path = "../parser/mod.rs"]
-mod parser;
-use bot::parser::{parse_map, Color, Mark};
-use bot::RandBot;
 
 pub struct Answerer {
-    bot: RandBot,
+    bot: MiniMaxBot,
 }
 
+//TODO: change RandBot to MiniMaxBot
 impl Answerer {
     pub fn new() -> Answerer {
         Answerer {
-            bot: RandBot::from(Vec::new(), Color::Red),
+            bot: MiniMaxBot::from(&Color::Red),
         }
     }
 
@@ -44,8 +41,8 @@ impl Answerer {
         "color ok"
     }
 
-    fn answer_move(&self) -> &str {
-        self.bot.return_available_move()
+    fn answer_move(&self, map: &Vec<Vec<Mark>>) -> String {
+        self.bot.which_move_shall_i_take(map, 9)
     }
 
     pub fn answer(&mut self) {
@@ -66,8 +63,7 @@ impl Answerer {
             _ => {
                 let move_str: &str = received_message.trim().split(' ').collect::<Vec<&str>>()[1];
                 let map: Vec<Vec<Mark>> = parse_map(move_str);
-                self.bot.map = map;
-                println!("{}", self.answer_move())
+                println!("{}", self.answer_move(&map))
             }
         }
     }
